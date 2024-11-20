@@ -1,0 +1,37 @@
+
+
+```
+station use_$tool
+
+    # Install $tool
+    if TRAIN[task] is install
+        and dockerized = TRAIN[dockerized]
+        and $dependency_command
+        and Add conditions making sure $tool dependecies are installed
+        and Add a condition checking to make sure $tool is NOT installed
+    
+        if ! run_command "$install_command"
+            return 1
+
+    # Configure $tool
+    if TRAIN[task] is install
+    or TRAIN[task] is config
+
+    Use find_files to grep the code base for the configurations
+        Configure find_files automatically
+            Avoid CHANGELOG.md
+            Avoid files with "deprecated"?
+
+        How do we verify the configuration
+    Use the --help / man pages to get the configurations
+
+    # Run tool
+    if TRAIN[manage_file] is not yes
+    and TRAIN[task] is not run_$tool
+        return 0
+
+
+
+    # Process $tool output
+
+```
