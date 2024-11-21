@@ -1,37 +1,39 @@
-
+$preamble
 
 ```
 station use_$tool
+    Add an echo of this function name and ():
 
     # Install $tool
     if TRAIN[task] is install
-        and dockerized = TRAIN[dockerized]
-        and $dependency_command
-        and Add conditions making sure $tool dependecies are installed
+        and Add the dockerized condition for $tool
+        and Add conditions making sure $tool dependencies are installed
         and Add a condition checking to make sure $tool is NOT installed
-    
-        if ! run_command "$install_command"
+
+        if run_command "$install_command" fails
             return 1
+
 
     # Configure $tool
     if TRAIN[task] is install
     or TRAIN[task] is config
+        Copy the configuration file to the correct location
 
-    Use find_files to grep the code base for the configurations
-        Configure find_files automatically
-            Avoid CHANGELOG.md
-            Avoid files with "deprecated"?
+    run_command=Add the command to run $tool on the command line
+    run_command+=Add additional flags by concatenating run_command
 
-        How do we verify the configuration
-    Use the --help / man pages to get the configurations
 
-    # Run tool
+    # Run $tool
     if TRAIN[manage_file] is not yes
     and TRAIN[task] is not run_$tool
         return 0
 
+    # Process any $tool errors
+    if run_command "$run_command" fails
+        return 1
 
-
-    # Process $tool output
-
+    # Process the $tool output
+    if TRAIN[file_log_path]
+    and the TRAIN[file_log_path] file exists
+        Use jq to consume the file_path, line_number, column_number, flaw_message
 ```

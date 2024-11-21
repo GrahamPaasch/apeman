@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
 
 
-Define the libraries that are installed during the Docker build
+function run_mocker {
+
+}

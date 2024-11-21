@@ -1,53 +1,21 @@
 
+HOW do we "Use find_files to grep the code base for the configurations"?
+        Configure find_files automatically
+            Avoid CHANGELOG.md
+            Avoid files with "deprecated"?
+
+        How do we verify the configuration
+    Use the --help / man pages to get the configurations
+
+    stack trace / ! run_command will write stderr errors
 
 
 
 
 # Definitions 
-
 ## installation_command 
-    The "installation_command" is the command Mocker will use to install a tool
-
-    Examples:
-        git clone
-        composer command
-        npm
-        pecl
-        apt-get
-        pip3
-        pipx
-        curl
-
-    Example Big:
-        apt-get -y install gcc make
-        git clone https://github.com/nikic/php-ast.git
-        cd php-ast
-        phpize
-        ./configure
-        make
-        make install
-        # Post-installation file configuration (if needed)
-        local ast_extension_path='/opt/php-ast/modules/ast.so'
-
-        if [ -f "$ast_extension_path" ]; then
-            chown "${TRAIN[mm_user]:?}:root" "$ast_extension_path"
-
-            chmod 755 "$ast_extension_path"
-        fi
-
 ## installed_command 
-
-    Examples: 
 ## dependency_command
-    The dependency_command is the command Mocker will use to check for dependencies for the tool installation
-
-    Examples:
-        command -v pecl
-
-
-
-
-
 
 # apeman
 GOALS: 
@@ -91,21 +59,26 @@ WHY:
 Girish Kumar <finetune@cgft.io> "automating sdlc"
 
 
+Prompt Processing Priority
+The Developer can pre-configure files_to_process.txt
+The Developer can set the specific order of the files
+MicroManager will use the pre-configured file if it exists
+MicroManager will NOT run create_file_lists if it exists
+When the files_to_process are inserted in the database,
+an autoincrement column will set the priority of the files
+This way, the file_lists table can be processed in order!
+
+Group
+$group The grouping/language of the tool string
+
+
 
 --------------------------
 
 APEMAN
 start with station template
 Use Mocker to replace the station template
-	$priority Define the order the tools are installed in
-		Integer 0 - 9
-		tools must have a lower priority than their languages
-		plugins must have a lower priority than their parents
-
-	$group The grouping/language of the tool
-		string
-
-	$parent_tool (in the case the $tool is a plugin)
+	$parent_tool (in the case the $tool is a plugin) Dependencies
 	$tool  Define use_ vs run_
 	$dependency_check(s)  Language installed, parent_tool, installer, (pipx, npm, curl, etc), etc
 		early exit (before installation if statement)
@@ -118,10 +91,12 @@ Use Mocker to replace the station template
 		pip3
 		pipx
 		curl
+        brew
 	$dockerized yes|no "Yes" if the tool is installed when building the Docker image/container
 	$installation_test_command    The short command that determines if the tool is installed
 
-	$code_location Downloaded code that can be grepped for configurations
+	$code_base_location Downloaded code that can be grepped for configurations
+        Automate this using find_files ?
 	$config_path  The location of the configuration file
 	$configuration_test_command   ?
 Is the configuration file a dependency? How do we handle that? Chicken/egg init required?

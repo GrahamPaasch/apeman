@@ -1,0 +1,201 @@
+
+# Echo Function name
+REQUEST: Add an echo of this function name and ():
+RESPONSE:
+    ```Bash
+    echo "${FUNCNAME[0]}():"
+    ```
+
+# Dockerized
+If a tool is installed during the Docker image build and is permanently built-in to the container
+
+Ollama is installed using poetry and curl
+REQUEST: Add the dockerized condition for ollama
+RESPONSE:
+    ```Bash
+    && [[ "${TRAIN[dockerized]:?}" == "no" ]] \
+    ```
+
+Pecl is installed using apt-get install -y
+REQUEST:  Add the dockerized condition for pecl
+RESPONSE:
+    ```Bash
+    && [[ "${TRAIN[dockerized]:?}" == "no" ]] \
+    ```
+
+php_codesniffer is installed using composer
+REQUEST:  Add the dockerized condition for php_codesniffer
+RESPONSE:
+    ```Bash
+    && [[ "${TRAIN[dockerized]:?}" == "yes" ]] \
+    ```
+
+phpmd is installed using composer
+REQUEST:  Add the dockerized condition for phpmd 
+RESPONSE:
+    ```Bash
+    composer require --dev phpmd/phpmd
+    ```
+
+code_chunker is installed using git clone
+REQUEST:  Add the dockerized condition for code_chunker
+RESPONSE:
+    ```Bash
+        cd "/opt" || return 1
+
+        # Create a virtual environment if it doesn't exist
+        if [[ ! -d "code_chunker_env" ]]; then
+            echo "  Creating virtual environment for Tiktoken . . ."
+            python3 -m venv code_chunker_env
+        fi
+
+        # Activate the virtual environment
+        echo "  Activating virtual environment . . ."
+        source code_chunker_env/bin/activate
+
+        git clone https://github.com/CintraAI/code-chunker.git /opt/code_chunker_env/lib/python3.11/site-packages/code_chunker
+ 
+        cd /opt/code_chunker_env/lib/python3.11/site-packages/code_chunker
+        sed -i 's/from CodeParser/from code_chunker.CodeParser/' Chunker.py
+        sed -i 's/from utils/from code_chunker.utils/' Chunker.py
+        pip install -r requirements.txt
+
+
+# Not Already installed
+Run a command to determine if the tool is already installed
+
+REQUEST: Add a condition checking to make sure pecl is NOT installed
+RESPONSE: 
+    ```Bash
+    ! command -v pecl
+    ```
+
+REQUEST:  Add a statement here to make sure php_codesniffer is NOT installed
+RESPONSE: 
+    ```Bash
+    ! -f "${TRAIN[bin_dir]:?}/phpcs"
+    ```
+
+REQUEST:  Add a statement here to make sure xdebug is NOT installed
+RESPONSE: 
+    ```Bash
+    ! $(php -m | /bin/grep 'xdebug')
+    ```
+
+REQUEST:  Add a statement here to make sure ast is NOT installed
+RESPONSE: 
+    ```Bash
+    && ! php -m | grep -q 'ast'; then
+    ```
+
+
+# Installation Dependencies
+
+REQUEST:  Add conditions making sure ollama dependencies are installed
+RESPONSE: 
+    ```Bash
+    command -v poetry &> /dev/null 
+    ```
+
+REQUEST:  Add conditions making sure ast dependencies are installed
+RESPONSE: 
+    ```Bash
+    && command -v pecl &> /dev/null \
+    ```
+
+
+# Install Commands
+
+REQUEST:  Add the installation commands to install ast
+RESPONSE:
+    ```Bash
+    command="pecl install ast"
+
+    if ! run_command "$command"; then
+        return 1
+    fi
+    ```
+
+REQUEST:  Add the installation commands to install pecl
+RESPONSE:
+    ```Bash
+    command="apt-get install -y pecl"
+
+    if ! run_command "$command"; then
+        return 1
+    fi
+    ```
+
+REQUEST: Add the installation commands to install php_codesniffer
+RESPONSE:
+    ```Bash
+    composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+    composer require --dev PHPCSStandards/PHP_CodeSniffer
+    composer require --dev slevomat/coding-standard
+    ```
+
+REQUEST:  Add the installation commands to install prettier 
+RESPONSE:
+    ```Bash
+    export DEBIAN_FRONTEND=noninteractive
+
+    # The Prettier package gets installed in /app
+    cd "${TRAIN[git_app_path]:?}" || return 1
+
+    npm config set fund false --global
+
+    command="npm install --global prettier"
+
+    if ! run_command "$command"; then
+        return 1
+    fi
+    ```
+
+code_chunker is installed using git clone
+REQUEST:  Add the installation commands to install code_chunker 
+RESPONSE:
+    ```Bash
+        cd "/opt" || return 1
+
+        # Create a virtual environment if it doesn't exist
+        if [[ ! -d "code_chunker_env" ]]; then
+            echo "  Creating virtual environment for Tiktoken . . ."
+            python3 -m venv code_chunker_env
+        fi
+
+        # Activate the virtual environment
+        echo "  Activating virtual environment . . ."
+        source code_chunker_env/bin/activate
+
+        command="git clone https://github.com/CintraAI/code-chunker.git /opt/code_chunker_env/lib/python3.11/site-packages/code_chunker"
+
+        if ! run_command "$command"; then
+            return 1
+        fi
+ 
+        cd /opt/code_chunker_env/lib/python3.11/site-packages/code_chunker
+        sed -i 's/from CodeParser/from code_chunker.CodeParser/' Chunker.py
+        sed -i 's/from utils/from code_chunker.utils/' Chunker.py
+       
+        command="pip install -r requirements.txt"
+
+        if ! run_command "$command"; then
+            return 1
+        fi
+    ```
+
+REQUEST:  Add the installation commands to install code_chunker 
+RESPONSE:
+    ```Bash
+    command="pipx install aider-chat"
+
+    if ! run_command "$command"; then
+        return 1
+    fi
+
+    # Register Python argument completion for pipx
+    eval "$(register-python-argcomplete pipx)"
+
+    # Ensure pipx's bin directory is in the PATH
+    pipx ensurepath
+
