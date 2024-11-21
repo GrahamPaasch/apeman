@@ -1,3 +1,4 @@
+Starting with eslint, python black, html beautifier, and all of their dependencies and plugins.
 
 HOW do we "Use find_files to grep the code base for the configurations"?
         Configure find_files automatically
