@@ -1,0 +1,40 @@
+station use_$tool
+	# tool_name
+
+	# Install $tool
+	if TRAIN[task] is install
+    	and TRAIN[dockerized] is TRAIN[dockerized]
+    	and TRAIN[dependency] is installed
+    	and TRAIN[installed]
+		if cd $install_directory fails
+			return 1
+
+		if /opt/tool folder does not exist
+			create /opt/tool or return 1
+
+		# Installation commands
+
+	# Configure tool
+	if TRAIN[task] is install
+	or TRAIN[task] is config
+
+	# Additional configurations (like setting env variables)
+
+	command=""
+
+	# Run tool
+	if TRAIN[manage_file] is not yes (fix or scan)
+	and TRAIN[task] is not use_$tool
+		return 0
+            
+	if TRAIN[file_type] is not $file_type
+    		return 0
+
+	# Execute
+
+	# Process tool errors
+
+	if there are no tool_errors
+		set_file_scanned
+
+	# Process tool (JSON) output
