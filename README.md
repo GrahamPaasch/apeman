@@ -24,11 +24,81 @@ The result is a functional bash script, produced from a generic template with va
 
 ## Relevent Concepts
 
-prompt engineering
-constrained decoding
-context free grammar
+* prompt engineering
+* constrained decoding
+* context free grammar
+
+## Components
+
+1. Station Template: contains train track psuedocode, contains variables filled in by qa tool data, installs/configures/executes/consumes, fed to llm, converts to bash
+2. Mocker: fills in the station template variables in a loop using the qa tools spreadsheet
+3. QA Tools Spreadsheet: https://docs.google.com/spreadsheets/d/1Dxn2uU1fWKs1bM2IXsPlW7wvqSB7h0KWWtJ4weM0BHI/edit?gid=0#gid=0
 
 # Notes
+## APEMAN
+* start with station template
+* Use Mocker to replace the station template
+    ```bash
+    $parent_tool (in the case the $tool is a plugin) Dependencies
+    $tool  Define use_ vs run_
+    $dependency_check(s)  Language installed, parent_tool, installer, (pipx, npm, curl, etc), etc
+        early exit (before installation if statement)
+    $installation_command
+        git clone
+        composer command
+        npm
+        pecl
+        apt-get
+        pip3
+        pipx
+        curl
+        brew
+    $dockerized yes|no "Yes" if the tool is installed when building the Docker image/container
+    $installation_test_command    The short command that determines if the tool is installed
+    $code_base_location Downloaded code that can be grepped for configurations
+        Automate this using find_files ?
+    $config_path  The location of the configuration file
+    $configuration_test_command   ?
+    ```
+* Is the configuration file a dependency? How do we handle that? Chicken/egg init required? Early exit if the config file is missing
+    ```bash
+	$stderr_path	The stack trace? output when the tool malfunctions
+	$stderr_test
+
+	$stdout_path   The (JSON/XML) output from scanning the file
+	$stdout_test
+	
+	$contributors  Scrape the number of contributors (for a vanity metric to support authority)
+
+	generate different prompts for the SDLCs ???
+		Do we run this as a singular prompt, OR as 5 individual prompts or BOTH
+		How do we ORGANIZE the prompt git repo so it defines the order of installations?
+			Directory depth   Subdirectories will be processed after parent directories
+			Using increments in Mocker ?
+
+	Do we create a XX?_MM_Prompt.md file with these flags set (as environment variables)?
+    ```
+* Automated checks
+	Figure out how to switch to /opt rather than /usr/local/etc and use_ instead of run_
+	Define MM functionalities vs Mocker/APE tool installation functionality? (or just not do the latter)
+	Is the code in a function?
+	Is TRAIN[dockerized] used?
+	snake_case We can enforce this for the MM wrapper functions
+		prettier, shfmt, shellcheck
+
+	Run XML/JSON/YML/ENV file checkers on the configuration files
+
+	Does the XX_test function convert to valid code (or throw a stderr)?
+	Does each XX_test function pass?
+
+	How does folder creation work? Mocker?
+
+	Some prompts can be more detailed
+		We CAN have a series of prompts to build up a station 
+(function/section by function) and concatenate the code into one function last
+* Mocker should prioritize if statements (for dependencies) (micro optimization)
+----------------
+
 as we're making list of tools, they need to go into the tool spreadsheet
 inflexible on process
 ape must be used for process
@@ -56,8 +126,6 @@ At this point, we could damn near *outsource* all of this as a "prompt
 engineering" project.
 We should be able to use MicroManager's brute force procedure to do all of
 these tasks.
-
-
 
 Use automated prompt engineering
     Prompting
@@ -99,7 +167,6 @@ tools
         This depends on all of the above tasks
         Write integration tests
         Run integration tests3
-
     Refactoring
         Relies on Prompting, Testing, Debugging, Maintaining, Securing
     Porting
@@ -125,9 +192,6 @@ HOW do we "Use find_files to grep the code base for the configurations"?
     Use the --help / man pages to get the configurations
 
     stack trace / ! run_command will write stderr errors
-
-
-
 
 # Definitions 
 ## installation_command 
@@ -170,11 +234,7 @@ WHY:
     MAN vs APE
     Perfectism
 
-
-
-
 Girish Kumar <finetune@cgft.io> "automating sdlc"
-
 
 Prompt Processing Priority
 The Developer can pre-configure files_to_process.txt
@@ -187,75 +247,6 @@ This way, the file_lists table can be processed in order!
 
 Group
 $group The grouping/language of the tool string
-
-
-
---------------------------
-
-APEMAN
-start with station template
-Use Mocker to replace the station template
-	$parent_tool (in the case the $tool is a plugin) Dependencies
-	$tool  Define use_ vs run_
-	$dependency_check(s)  Language installed, parent_tool, installer, (pipx, npm, curl, etc), etc
-		early exit (before installation if statement)
-	$installation_command
-		git clone
-		composer command
-		npm
-		pecl
-		apt-get
-		pip3
-		pipx
-		curl
-        brew
-	$dockerized yes|no "Yes" if the tool is installed when building the Docker image/container
-	$installation_test_command    The short command that determines if the tool is installed
-
-	$code_base_location Downloaded code that can be grepped for configurations
-        Automate this using find_files ?
-	$config_path  The location of the configuration file
-	$configuration_test_command   ?
-Is the configuration file a dependency? How do we handle that? Chicken/egg init required?
-	Early exit if the config file is missing
-
-	$stderr_path	The stack trace? output when the tool malfunctions
-	$stderr_test
-
-	$stdout_path   The (JSON/XML) output from scanning the file
-	$stdout_test
-	
-	$contributors  Scrape the number of contributors (for a vanity metric to support authority)
-
-	generate different prompts for the SDLCs ???
-		Do we run this as a singular prompt, OR as 5 individual prompts or BOTH
-		How do we ORGANIZE the prompt git repo so it defines the order of installations?
-			Directory depth   Subdirectories will be processed after parent directories
-			Using increments in Mocker ?
-
-	Do we create a XX?_MM_Prompt.md file with these flags set (as environment variables)?
-
-Automated checks
-	Figure out how to switch to /opt rather than /usr/local/etc and use_ instead of run_
-	Define MM functionalities vs Mocker/APE tool installation functionality? (or just not do the latter)
-	Is the code in a function?
-	Is TRAIN[dockerized] used?
-	snake_case We can enforce this for the MM wrapper functions
-		prettier, shfmt, shellcheck
-
-	Run XML/JSON/YML/ENV file checkers on the configuration files
-
-	Does the XX_test function convert to valid code (or throw a stderr)?
-	Does each XX_test function pass?
-
-	How does folder creation work? Mocker?
-
-	Some prompts can be more detailed
-		We CAN have a series of prompts to build up a station 
-(function/section by function) and concatenate the code into one function last
-
-Mocker should prioritize if statements (for dependencies) (micro optimization)
-
 
 --------------------------
 
