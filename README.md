@@ -1,4 +1,120 @@
-Starting with eslint, python black, html beautifier, and all of their dependencies and plugins.
+# APEMAN (Manual Precursor to APE)
+
+## What is APEMAN?
+
+APEMAN is a manual prompt engineering project meant to kick off a large APE (automated prompt
+engineering) feature of micromanager. Visit codecartel.codes to learn more about this project.
+
+## Goals of APEMAN
+
+Starting with eslint, python black, html beautifier, and all of their dependencies and plugins...
+
+manually experiement with writing a prompt, that produces an output from any LLM, that successfully...
+
+1. installs
+2. configures
+3. executes
+4. consumes
+
+a qa tool, configured to it's highest code quality standards.
+
+The prompt must serve as a template with variables that can be filled in automatically, to produce the same result for other qa tools.
+
+The result is a functional bash script, produced from a generic template with variables filled in from a spreadsheet of qa tools.
+
+## Relevent Concepts
+
+prompt engineering
+constrained decoding
+context free grammar
+
+# Notes
+as we're making list of tools, they need to go into the tool spreadsheet
+inflexible on process
+ape must be used for process
+Mock MM Tools spreadsheet for "Mocker"
+writing mocker simple bash script
+export spreadsheet to csv
+loop through and automatically create folders based on column A
+mock a run function using column B and H
+want to write a script that will mock out the tools
+dockerized = no, means library gets installed during docker build
+dockerized = no means hey we're building container, has not be dockerized YET, need to apt get intall when we are building the ontianer, once it is build is when we install some tools
+
+Our goal is to prompt MicroManager to complete the following
+functionalities AUTOMATICALLY.
+
+By automating these tasks, we will . . .
+. learn how to use MicroManager
+. learn MicroManager's limitations
+. dramatically reduce the emotional energy spent completing these tasks
+. reduce the development time
+. increase the probability of succeeding at completing these tasks on other
+software
+
+At this point, we could damn near *outsource* all of this as a "prompt
+engineering" project.
+We should be able to use MicroManager's brute force procedure to do all of
+these tasks.
+
+
+
+Use automated prompt engineering
+    Prompting
+        Curate and optimize prompts
+
+https://www.reddit.com/r/PromptEngineering/comments/1ef1zs9/you_should_be_a=
+b_testing_your_prompts/
+    Installing
+        Finish run_ (or use_) template functions that are 50%+ drafted
+    Configuring
+        Scrape the configuration parameters (using Aider, Chromium,
+Playwrite)
+        Feed the configuration parameters to MicroManager
+        This relies on Prompting (because configuration files may be large)
+    Testing
+        Write unit tests
+        Run unit tests
+        Write mutation tests
+        Run mutation tests
+    Running
+        This relies solely on Testing
+    Debugging
+        Parse stack trace log files
+        Get the file paths of the related files
+        Feed the related files into MicroManager
+
+https://github.com/biobootloader/wolverine/blob/main/wolverine/wolverine.py
+    Maintaining
+        Automated in the default design of MicroManager
+        Relies on the Installing, Configuring, and Debugging functionality
+    Securing
+        Vulnerability scanning
+        Dependency scanning
+        This depends on Installing, Configuring, Running, and Debugging QA
+tools
+        PCI, HIPPA, SO:27001, SOC2, etc compliance (relies on QA tools)
+    API integration
+        We is just gonna need API integration
+        This depends on all of the above tasks
+        Write integration tests
+        Run integration tests3
+
+    Refactoring
+        Relies on Prompting, Testing, Debugging, Maintaining, Securing
+    Porting
+        Convert the code from one programming language to another
+        Relies on refactoring
+
+for now mm will only support the latest version of the language
+py 2.7 not supported, only support py 3.12
+any py 3/2 code will automatically be upgraded
+it's a rule to prevent maintaining multiple versions of each language
+if client/project can't accept this rule they are out, scope needs to remain low
+
+we only accept tools that can be run in the background, fully automated, and without any developer interaction
+one configuration in the beginning
+everyone uses the same very strict configuration
 
 HOW do we "Use find_files to grep the code base for the configurations"?
         Configure find_files automatically
