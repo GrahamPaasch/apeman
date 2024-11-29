@@ -9,9 +9,18 @@ if [ ! -f "$csv_file" ]; then
     exit 1
 fi
 
-# Create output directory for generated scripts
-output_dir="generated_scripts"
+# Create output directory for generated train track templates
+output_dir="generated_templates"
 mkdir -p "$output_dir"
+
+# Path to the station template
+station_template="station_template.tt"
+
+# Check if the station template file exists
+if [ ! -f "$station_template" ]; then
+    echo "Error: Station template file '$station_template' not found."
+    exit 1
+fi
 
 # Process each line of the CSV (skip the header)
 tail -n +2 "$csv_file" | while IFS=',' read -r tool link install_command group contributors; do
@@ -20,46 +29,21 @@ tail -n +2 "$csv_file" | while IFS=',' read -r tool link install_command group c
         continue
     fi
 
-    # Define the output script file
-    script_file="$output_dir/$(echo "$tool" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/_/g')_install.sh"
+    # Normalize the tool name
+    tool=$(echo "$tool" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/_/g')
 
-    # Generate the script using a template
-    cat <<EOF >"$script_file"
-#!/bin/bash
+    # Define the output train track template file
+    template_file="$output_dir/${tool}.tt"
 
-# Tool: $tool
-# Repository: $link
-# Group: $group
-# Contributors: $contributors
+    # Replace placeholders in the station template and write the train track file
+    sed -e "s/{{TOOL}}/$tool/g" \
+        -e "s|{{LINK}}|$link|g" \
+        -e "s|{{INSTALL_COMMAND}}|$install_command|g" \
+        -e "s|{{GROUP}}|$group|g" \
+        -e "s|{{CONTRIBUTORS}}|$contributors|g" \
+        "$station_template" > "$template_file"
 
-# Check if the tool is already installed
-if ! command -v $tool &> /dev/null; then
-    echo "$tool is not installed. Installing now..."
-    # Clone the repository if a link is provided
-    if [ ! -z "$link" ]; then
-        git clone "$link" /tmp/$tool || { echo "Failed to clone repository."; exit 1; }
-    fi
-
-    # Run the installation command
-    $install_command || { echo "Installation failed for $tool."; exit 1; }
-else
-    echo "$tool is already installed."
-fi
-
-# Add configuration steps here if required
-echo "Configuration for $tool is complete."
-
-# Test installation (optional, replace with actual test command)
-echo "Testing $tool installation..."
-$tool --help || { echo "Testing $tool failed."; exit 1; }
-
-echo "$tool setup is complete."
-EOF
-
-    # Make the generated script executable
-    chmod +x "$script_file"
-
-    echo "Generated script for $tool: $script_file"
+    echo "Generated train track template for $tool: $template_file"
 done
 
-echo "All scripts have been generated in the '$output_dir' directory."
+echo "All templates have been generated in the '$output_dir' directory."
