@@ -7,7 +7,14 @@ engineering) feature of micromanager. Visit codecartel.codes to learn more about
 
 ## Goals of APEMAN
 
-Starting with eslint, python black, html beautifier, and all of their dependencies and plugins...
+Starting with...
+
+1. eslint
+2. python black
+3. html beautifier
+4. apexsql plan
+
+and all of their dependencies and plugins...
 
 manually experiement with writing a prompt, that produces an output from any LLM, that successfully...
 
