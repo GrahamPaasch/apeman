@@ -1,3 +1,6 @@
+$preamble
+
+```
 station use_{{TOOL}}
 	# {{TOOL}} configuration and usage template
 
@@ -38,3 +41,4 @@ station use_{{TOOL}}
 		set_file_scanned
 
 	# Process tool (JSON) output
+```

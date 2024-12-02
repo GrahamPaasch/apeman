@@ -10,7 +10,7 @@ if [ ! -f "$csv_file" ]; then
 fi
 
 # Create output directory for generated train track templates
-output_dir="generated_templates"
+output_dir="prompts"
 mkdir -p "$output_dir"
 
 # Path to the station template
