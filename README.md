@@ -3,7 +3,7 @@
 ## What is APEMAN?
 
 APEMAN is a manual prompt engineering project meant to kick off a large APE (automated prompt
-engineering) feature of micromanager. Visit codecartel.codes to learn more about this project.
+engineering) feature of micromanager. Visit codecartel.codes to learn more about the MicroManager project.
 
 ## Goals of APEMAN
 
