@@ -1,4 +1,4 @@
-$preamble
+Write the following psuedocode into a bash script.
 
 ```
 station use_{{TOOL}}
