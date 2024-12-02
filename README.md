@@ -32,14 +32,14 @@ The result is a functional bash script, produced from a generic template with va
 ## Relevent Concepts
 
 * prompt engineering
-* constrained decoding
+* [constrained decoding](https://www.aidancooper.co.uk/constrained-decoding/#motivating-example)
 * context free grammar
 
 ## Components
 
-1. Station Template: contains train track psuedocode, contains variables filled in by qa tool data, installs/configures/executes/consumes, fed to llm, converts to bash
+1. Station Template: contains train track psuedocode, contains variables to be filled in by qa tool data from a spreadsheet, installs/configures/executes/consumes, fed to llm, converts to bash
 2. Mocker: fills in the station template variables in a loop using the qa tools spreadsheet
-3. QA Tools Spreadsheet: https://docs.google.com/spreadsheets/d/1Dxn2uU1fWKs1bM2IXsPlW7wvqSB7h0KWWtJ4weM0BHI/edit?gid=0#gid=0
+3. [QA Tools Spreadsheet](https://docs.google.com/spreadsheets/d/1Dxn2uU1fWKs1bM2IXsPlW7wvqSB7h0KWWtJ4weM0BHI/edit?gid=0#gid=0)
 
 # Notes
 ## APEMAN
